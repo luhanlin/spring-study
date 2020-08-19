@@ -17,4 +17,9 @@ public class TestServiceImpl  implements TestService {
     public void test() {
 
     }
+
+    @Override
+    public String query(String name, String addr) throws Exception {
+        throw new Exception("故意抛出的异常");
+    }
 }

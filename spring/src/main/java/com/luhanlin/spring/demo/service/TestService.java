@@ -11,4 +11,6 @@ package com.luhanlin.spring.demo.service;
 public interface TestService {
 
     void test();
+
+    String query(String name, String addr) throws Exception;
 }

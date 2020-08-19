@@ -133,7 +133,7 @@ public class LUDispatcherServlet extends HttpServlet {
         readResource();
 
         // 2. 扫描配置文件资源相关类
-        scanPackageClass(String.valueOf(contextConfig.get("basepackage")));
+        scanPackageClass(String.valueOf(contextConfig.get("base-package")));
 
         // 3. 进行配置类初始化，并装载bean到IOC容器
         loadBeanToIoc();

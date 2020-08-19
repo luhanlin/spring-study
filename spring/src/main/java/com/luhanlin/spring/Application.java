@@ -1,6 +1,6 @@
 package com.luhanlin.spring;
 
-import com.luhanlin.spring.framework.core.LUDispatcherServlet;
+import com.luhanlin.spring.framework.v2.webmvc.LUDispatcherServlet;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
