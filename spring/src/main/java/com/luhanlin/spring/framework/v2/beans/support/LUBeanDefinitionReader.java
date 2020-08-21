@@ -32,6 +32,7 @@ public class LUBeanDefinitionReader {
 
     /**
      * 主方法，进行 beanDefinition 加载
+     *
      * @return
      */
     public List<LUBeanDefinition> loadBeanDefinitions() {
@@ -56,8 +57,8 @@ public class LUBeanDefinitionReader {
             contextConfig.load(fis);
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
-            if(null != fis){
+        } finally {
+            if (null != fis) {
                 try {
                     fis.close();
                 } catch (IOException e) {
@@ -89,6 +90,7 @@ public class LUBeanDefinitionReader {
 
     /**
      * 扫描基础包下的文件
+     *
      * @param basePackage
      */
     private void scanPackageClass(String basePackage) {
@@ -113,7 +115,7 @@ public class LUBeanDefinitionReader {
         }
     }
 
-    public Properties getConfig(){
+    public Properties getConfig() {
         return this.contextConfig;
     }
 

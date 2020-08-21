@@ -8,7 +8,7 @@ package com.luhanlin.spring.framework.v2.aop;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public class LUCglibAopProxy implements LUAopProxy{
+public class LUCglibAopProxy implements LUAopProxy {
 
     @Override
     public Object getProxy() {

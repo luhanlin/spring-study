@@ -18,10 +18,14 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class LUDefaultListableBeanFactory extends LUAbstractApplicationContext {
 
-    /** Map of bean definition objects, keyed by bean name. */
+    /**
+     * Map of bean definition objects, keyed by bean name.
+     */
     protected final Map<String, LUBeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
     protected final Map<String, Object> singletonBeanMap = new ConcurrentHashMap<>(256);
-    /** Cache of unfinished FactoryBean instances: FactoryBean name to BeanWrapper. */
+    /**
+     * Cache of unfinished FactoryBean instances: FactoryBean name to BeanWrapper.
+     */
     protected final ConcurrentMap<String, LUBeanWrapper> factoryBeanInstanceCache = new ConcurrentHashMap<>();
 
 }

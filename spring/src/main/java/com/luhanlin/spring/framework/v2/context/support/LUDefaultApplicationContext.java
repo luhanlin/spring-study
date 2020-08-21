@@ -51,7 +51,8 @@ public class LUDefaultApplicationContext extends LUDefaultListableBeanFactory im
 
     @Override
     public Object getBean(String beanName) {
-        if (this.factoryBeanInstanceCache.containsKey(beanName)) return factoryBeanInstanceCache.get(beanName).getWrappedInstance();
+        if (this.factoryBeanInstanceCache.containsKey(beanName))
+            return factoryBeanInstanceCache.get(beanName).getWrappedInstance();
 
         LUBeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
         /**
@@ -74,21 +75,23 @@ public class LUDefaultApplicationContext extends LUDefaultListableBeanFactory im
     private void populateBean(String factoryBeanName, LUBeanDefinition beanDefinition, LUBeanWrapper beanWrapper) {
         Class<?> wrappedClass = beanWrapper.getWrappedClass();
         Object wrappedInstance = beanWrapper.getWrappedInstance();
-        if(!(wrappedClass.isAnnotationPresent(LUController.class) || wrappedClass.isAnnotationPresent(LUService.class))){
+        if (!(wrappedClass.isAnnotationPresent(LUController.class) || wrappedClass.isAnnotationPresent(LUService.class))) {
             return;
         }
         //Declared 所有的，特定的 字段，包括private/protected/default
         //正常来说，普通的OOP编程只能拿到public的属性
         Field[] fields = wrappedClass.getDeclaredFields();
         for (Field field : fields) {
-            if(!field.isAnnotationPresent(LUAutowired.class)){continue;}
+            if (!field.isAnnotationPresent(LUAutowired.class)) {
+                continue;
+            }
             LUAutowired autowired = field.getAnnotation(LUAutowired.class);
 
             //如果用户没有自定义beanName，默认就根据类型注入
             //这个地方省去了对类名首字母小写的情况的判断，这个作为课后作业
             //小伙伴们自己去完善
             String beanName = autowired.value().trim();
-            if("".equals(beanName)){
+            if ("".equals(beanName)) {
                 //获得接口的类型，作为key待会拿这个key到ioc容器中去取值
                 beanName = BeanNameUtil.toLowerFirstCase(field.getType().getSimpleName());
             }
@@ -102,7 +105,7 @@ public class LUDefaultApplicationContext extends LUDefaultListableBeanFactory im
 //                if(this.factoryBeanInstanceCache.get(beanName) == null){ continue; }
                 System.out.println("依赖注入的 BeanName = " + beanName);
                 System.out.println("依赖注入的 BeanWrapper = " + this.singletonBeanMap.get(beanName));
-                field.set(wrappedInstance,this.singletonBeanMap.get(beanName));
+                field.set(wrappedInstance, this.singletonBeanMap.get(beanName));
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
@@ -115,7 +118,8 @@ public class LUDefaultApplicationContext extends LUDefaultListableBeanFactory im
 
     /**
      * 封装BeanWrapper
-     * @param beanName 存储在容器中的beanName
+     *
+     * @param beanName       存储在容器中的beanName
      * @param beanDefinition
      * @return
      */
@@ -143,12 +147,12 @@ public class LUDefaultApplicationContext extends LUDefaultListableBeanFactory im
             //3、根据类型自动赋值,投机取巧的方式
             for (Class<?> i : clazz.getInterfaces()) {
                 String instanceName = BeanNameUtil.toLowerFirstCase(i.getSimpleName());
-                if(singletonBeanMap.containsKey(instanceName)){
+                if (singletonBeanMap.containsKey(instanceName)) {
 //                    throw new Exception("The “" + instanceName + "” is exists!!");
                     continue;
                 }
                 //把接口的类型直接当成key了
-                singletonBeanMap.put(instanceName,instance);
+                singletonBeanMap.put(instanceName, instance);
 //                if (!factoryBeanInstanceCache.containsKey(instanceName)) {
 //                    this.factoryBeanInstanceCache.put(instanceName, wr);
 //                }
@@ -178,11 +182,11 @@ public class LUDefaultApplicationContext extends LUDefaultListableBeanFactory im
         });
     }
 
-    public void printBeanWrapperMap(){
+    public void printBeanWrapperMap() {
         this.factoryBeanInstanceCache.keySet().forEach(System.out::println);
     }
 
-    public void printBeanDefinitionMap(){
+    public void printBeanDefinitionMap() {
         this.beanDefinitionMap.values().forEach(System.out::println);
     }
 
@@ -190,11 +194,11 @@ public class LUDefaultApplicationContext extends LUDefaultListableBeanFactory im
         return this.beanDefinitionMap.keySet().toArray(new String[this.beanDefinitionMap.size()]);
     }
 
-    public int getBeanDefinitionCount(){
+    public int getBeanDefinitionCount() {
         return this.beanDefinitionMap.size();
     }
 
-    public Properties getConfig(){
+    public Properties getConfig() {
         return this.reader.getConfig();
     }
 }

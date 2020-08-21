@@ -55,8 +55,8 @@ public class LUDispatcherServlet extends HttpServlet {
         // 1. 通过request 获取url对应的handler
         LUHandlerMapping handler = getHandler(req);
 
-        if(handler == null){
-            processDispatchResult(req,resp,new LUModelAndView("404"));
+        if (handler == null) {
+            processDispatchResult(req, resp, new LUModelAndView("404"));
             return;
         }
 
@@ -72,22 +72,28 @@ public class LUDispatcherServlet extends HttpServlet {
     private void processDispatchResult(HttpServletRequest req, HttpServletResponse resp, LUModelAndView mv) throws Exception {
         //把ModelAndView变成一个HTML、json
         //ContextType
-        if(null == mv){return;}
+        if (null == mv) {
+            return;
+        }
 
         //如果ModelAndView不为null，怎么办？
-        if(this.viewResolvers.isEmpty()){return;}
+        if (this.viewResolvers.isEmpty()) {
+            return;
+        }
 
         for (LUViewResolver viewResolver : this.viewResolvers) {
-            LUView view = viewResolver.resolveViewName(mv.getViewName(),null);
-            view.render(mv.getModel(),req,resp);
+            LUView view = viewResolver.resolveViewName(mv.getViewName(), null);
+            view.render(mv.getModel(), req, resp);
             return;
         }
     }
 
     private LUHandlerAdapter getHandlerAdapter(LUHandlerMapping handler) {
-        if(this.handlerAdapters.isEmpty()){return null;}
+        if (this.handlerAdapters.isEmpty()) {
+            return null;
+        }
         LUHandlerAdapter ha = this.handlerAdapters.get(handler);
-        if(ha.supports(handler)){
+        if (ha.supports(handler)) {
             return ha;
         }
         return null;
@@ -97,11 +103,11 @@ public class LUDispatcherServlet extends HttpServlet {
         if (this.handlerMappings.isEmpty()) return null;
         String url = req.getRequestURI();
 
-        url = url.replace(req.getContextPath(),"").replaceAll("/+","/");
+        url = url.replace(req.getContextPath(), "").replaceAll("/+", "/");
 
         // 在处理集合中寻找匹配的url
         for (LUHandlerMapping handler : this.handlerMappings) {
-            if (handler.getUrlPattern().matcher(url).matches()){
+            if (handler.getUrlPattern().matcher(url).matches()) {
                 return handler;
             }
         }
@@ -109,7 +115,7 @@ public class LUDispatcherServlet extends HttpServlet {
     }
 
     @Override
-    public void init(ServletConfig config ) throws ServletException {
+    public void init(ServletConfig config) throws ServletException {
         System.out.println("开始初始化servlet");
         // 1. 初始化自定义spring容器
         LUDefaultApplicationContext context = new LUDefaultApplicationContext(new String[]{"application.properties"});
@@ -120,6 +126,7 @@ public class LUDispatcherServlet extends HttpServlet {
 
     /**
      * 初始化 Spring MVC 9 大组件
+     *
      * @param context
      */
     protected void initStrategies(LUDefaultApplicationContext context) {
@@ -142,7 +149,7 @@ public class LUDispatcherServlet extends HttpServlet {
 
         File templateRootDir = new File(templateRootPath);
         String[] templates = templateRootDir.list();
-        for (int i = 0; i < templates.length; i ++) {
+        for (int i = 0; i < templates.length; i++) {
             //这里主要是为了兼容多模板，所有模仿Spring用List保存
             //在我写的代码中简化了，其实只有需要一个模板就可以搞定
             //只是为了仿真，所有还是搞了个List
@@ -153,7 +160,7 @@ public class LUDispatcherServlet extends HttpServlet {
     private void initHandlerAdapters(LUDefaultApplicationContext context) {
         if (this.handlerMappings.isEmpty()) return;
 
-        for (LUHandlerMapping handlerMapping: handlerMappings) {
+        for (LUHandlerMapping handlerMapping : handlerMappings) {
             handlerAdapters.put(handlerMapping, new LUHandlerAdapter());
         }
     }
@@ -180,9 +187,9 @@ public class LUDispatcherServlet extends HttpServlet {
                 String url = (baseUrl + "/" + fieldRm.value()).replaceAll("/+", "/");
                 Pattern urlPattern = Pattern.compile(url);
 
-                this.handlerMappings.add(new LUHandlerMapping(urlPattern,method,bean));
+                this.handlerMappings.add(new LUHandlerMapping(urlPattern, method, bean));
 
-                System.out.println("请求 ["+url+"] 映射成功！");
+                System.out.println("请求 [" + url + "] 映射成功！");
             }
 
         }

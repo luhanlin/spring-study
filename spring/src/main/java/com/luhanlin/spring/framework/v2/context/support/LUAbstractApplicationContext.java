@@ -10,5 +10,6 @@ package com.luhanlin.spring.framework.v2.context.support;
  */
 public abstract class LUAbstractApplicationContext {
 
-    protected void refresh(){}
+    protected void refresh() {
+    }
 }

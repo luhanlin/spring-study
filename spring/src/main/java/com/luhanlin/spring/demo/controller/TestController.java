@@ -27,25 +27,25 @@ public class TestController {
     private TestService testService;
 
     @LURequestMapping("hello")
-    public LUModelAndView hello(@LURequestParam("name") String name, @LURequestParam("addr") String addr){
+    public LUModelAndView hello(@LURequestParam("name") String name, @LURequestParam("addr") String addr) {
 
-        Map<String,Object> model = new HashMap<String,Object>();
-        model.put("name",name);
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("name", name);
         model.put("addr", addr);
-        return new LUModelAndView("first",model);
+        return new LUModelAndView("first", model);
     }
 
     @LURequestMapping("/query")
-    public LUModelAndView query(@LURequestParam("name") String name, @LURequestParam("addr") String addr){
+    public LUModelAndView query(@LURequestParam("name") String name, @LURequestParam("addr") String addr) {
         String result = null;
         try {
-            result = testService.query(name,addr);
+            result = testService.query(name, addr);
             return null;
         } catch (Exception e) {
-            Map<String,Object> model = new HashMap<String,Object>();
-            model.put("detail",e.getCause().getMessage());
-            model.put("stackTrace", Arrays.toString(e.getStackTrace()).replaceAll("\\[|\\]",""));
-            return new LUModelAndView("500",model);
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("detail", e.getCause().getMessage());
+            model.put("stackTrace", Arrays.toString(e.getStackTrace()).replaceAll("\\[|\\]", ""));
+            return new LUModelAndView("500", model);
         }
     }
 }

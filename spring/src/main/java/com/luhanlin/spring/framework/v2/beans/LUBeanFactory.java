@@ -12,6 +12,7 @@ public interface LUBeanFactory {
 
     /**
      * 从IOC容器中获取实例对象
+     *
      * @param beanName
      * @return
      */

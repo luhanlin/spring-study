@@ -7,6 +7,6 @@ import java.lang.annotation.*;
 @Documented
 public @interface LURequestMapping {
 
-	String value() default "";
+    String value() default "";
 
 }

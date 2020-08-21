@@ -65,19 +65,21 @@ public class LUDispatcherServlet extends HttpServlet {
 
         // 反射调用对应的方法处理
         //获得方法的形参列表
-        Class<?> [] paramTypes = handler.getParamType();
+        Class<?>[] paramTypes = handler.getParamType();
 
-        Object [] paramValues = new Object[paramTypes.length];
+        Object[] paramValues = new Object[paramTypes.length];
 
-        Map<String,String[]> params = req.getParameterMap();
+        Map<String, String[]> params = req.getParameterMap();
         for (Map.Entry<String, String[]> parm : params.entrySet()) {
-            String value = Arrays.toString(parm.getValue()).replaceAll("\\[|\\]","")
-                    .replaceAll("\\s",",");
+            String value = Arrays.toString(parm.getValue()).replaceAll("\\[|\\]", "")
+                    .replaceAll("\\s", ",");
 
-            if(!handler.paramIndexMap.containsKey(parm.getKey())){continue;}
+            if (!handler.paramIndexMap.containsKey(parm.getKey())) {
+                continue;
+            }
 
             int index = handler.paramIndexMap.get(parm.getKey());
-            paramValues[index] = convert(paramTypes[index],value);
+            paramValues[index] = convert(paramTypes[index], value);
         }
 
 //        if(handler.paramIndexMap.containsKey(HttpServletRequest.class.getName())) {
@@ -90,8 +92,10 @@ public class LUDispatcherServlet extends HttpServlet {
 //            paramValues[respIndex] = resp;
 //        }
 
-        Object returnValue = handler.method.invoke(handler.controller,paramValues);
-        if(returnValue == null || returnValue instanceof Void){ return; }
+        Object returnValue = handler.method.invoke(handler.controller, paramValues);
+        if (returnValue == null || returnValue instanceof Void) {
+            return;
+        }
         resp.getWriter().write(returnValue.toString());
     }
 
@@ -99,11 +103,11 @@ public class LUDispatcherServlet extends HttpServlet {
         if (this.handlerMappings.isEmpty()) return null;
         String url = req.getRequestURI();
 
-        url = url.replace(req.getContextPath(),"").replaceAll("/+","/");
+        url = url.replace(req.getContextPath(), "").replaceAll("/+", "/");
 
         // 在处理集合中寻找匹配的url
         for (LUHandlerMapping handler : this.handlerMappings) {
-            if (handler.getUrl().matcher(url).matches()){
+            if (handler.getUrl().matcher(url).matches()) {
                 return handler;
             }
         }
@@ -112,12 +116,11 @@ public class LUDispatcherServlet extends HttpServlet {
 
     //url传过来的参数都是String类型的，HTTP是基于字符串协议
     //只需要把String转换为任意类型就好
-    private Object convert(Class<?> type,String value){
+    private Object convert(Class<?> type, String value) {
         //如果是int
-        if(Integer.class == type){
+        if (Integer.class == type) {
             return Integer.valueOf(value);
-        }
-        else if(Double.class == type){
+        } else if (Double.class == type) {
             return Double.valueOf(value);
         }
         //如果还有double或者其他类型，继续加if
@@ -127,7 +130,7 @@ public class LUDispatcherServlet extends HttpServlet {
     }
 
     @Override
-    public void init(ServletConfig config ) throws ServletException {
+    public void init(ServletConfig config) throws ServletException {
         System.out.println("开始初始化servlet");
         // 1. 加载配置文件资源
         readResource();
@@ -155,8 +158,8 @@ public class LUDispatcherServlet extends HttpServlet {
             contextConfig.load(fis);
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
-            if(null != fis){
+        } finally {
+            if (null != fis) {
                 try {
                     fis.close();
                 } catch (IOException e) {
@@ -213,11 +216,11 @@ public class LUDispatcherServlet extends HttpServlet {
                     // 将器接口层也放入ioc容器管理
                     //3、根据类型自动赋值,投机取巧的方式
                     for (Class<?> i : clazz.getInterfaces()) {
-                        if(ioc.containsKey(i.getName())){
+                        if (ioc.containsKey(i.getName())) {
                             throw new Exception("The “" + i.getName() + "” is exists!!");
                         }
                         //把接口的类型直接当成key了
-                        ioc.put(i.getName(),instance);
+                        ioc.put(i.getName(), instance);
                     }
                 } else {
                     continue;
@@ -231,20 +234,23 @@ public class LUDispatcherServlet extends HttpServlet {
     }
 
     private void doAutowired() {
-        if (ioc.isEmpty()) return;;
+        if (ioc.isEmpty()) return;
+        ;
         for (Map.Entry<String, Object> entry : ioc.entrySet()) {
             //Declared 所有的，特定的 字段，包括private/protected/default
             //正常来说，普通的OOP编程只能拿到public的属性
             Field[] fields = entry.getValue().getClass().getDeclaredFields();
             for (Field field : fields) {
-                if(!field.isAnnotationPresent(LUAutowired.class)){continue;}
+                if (!field.isAnnotationPresent(LUAutowired.class)) {
+                    continue;
+                }
                 LUAutowired autowired = field.getAnnotation(LUAutowired.class);
 
                 //如果用户没有自定义beanName，默认就根据类型注入
                 //这个地方省去了对类名首字母小写的情况的判断，这个作为课后作业
                 //小伙伴们自己去完善
                 String beanName = autowired.value().trim();
-                if("".equals(beanName)){
+                if ("".equals(beanName)) {
                     //获得接口的类型，作为key待会拿这个key到ioc容器中去取值
                     beanName = field.getType().getName();
                 }
@@ -255,7 +261,7 @@ public class LUDispatcherServlet extends HttpServlet {
 
                 try {
                     //用反射机制，动态给字段赋值
-                    field.set(entry.getValue(),ioc.get(beanName));
+                    field.set(entry.getValue(), ioc.get(beanName));
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
@@ -264,7 +270,7 @@ public class LUDispatcherServlet extends HttpServlet {
     }
 
     private void initHandlerMapping() {
-        if(ioc.isEmpty()) return;
+        if (ioc.isEmpty()) return;
         for (Map.Entry<String, Object> entry : ioc.entrySet()) {
             Class<?> clazz = entry.getValue().getClass();
             if (!clazz.isAnnotationPresent(LUController.class)) continue;
@@ -283,9 +289,9 @@ public class LUDispatcherServlet extends HttpServlet {
                 baseUrl = (baseUrl + "/" + fieldRm.value()).replaceAll("/+", "/");
                 Pattern urlPattern = Pattern.compile(baseUrl);
 
-                this.handlerMappings.add(new LUHandlerMapping(urlPattern,method,entry.getValue()));
+                this.handlerMappings.add(new LUHandlerMapping(urlPattern, method, entry.getValue()));
 
-                System.out.println("请求 ["+baseUrl+"] 映射成功！");
+                System.out.println("请求 [" + baseUrl + "] 映射成功！");
             }
 
         }

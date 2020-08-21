@@ -23,9 +23,11 @@ public class LUViewResolver {
     }
 
     public LUView resolveViewName(String viewName, Object o) {
-        if(null == viewName || "".equals(viewName.trim())){return null;}
+        if (null == viewName || "".equals(viewName.trim())) {
+            return null;
+        }
         viewName = viewName.endsWith(DEFAULT_TEMPLATE_SUFFIX) ? viewName : (viewName + DEFAULT_TEMPLATE_SUFFIX);
-        File templateFile = new File((templateRootDir.getPath() + "/" + viewName).replaceAll("/+","/"));
+        File templateFile = new File((templateRootDir.getPath() + "/" + viewName).replaceAll("/+", "/"));
         return new LUView(templateFile);
     }
 }
