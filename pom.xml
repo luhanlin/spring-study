@@ -13,6 +13,7 @@
         <module>spring</module>
         <module>concurrent</module>
         <module>ioc-container</module>
+        <module>spring-beans</module>
     </modules>
 
     <properties>
