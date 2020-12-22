@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="user" class="com.luhanlin.ioc.domain.User">
+        <!-- collaborators and configuration for this bean go here -->
+        <property name="age" value="1"/>
+        <property name="name" value="lin"/>
+    </bean>
+
+    <bean id="superUser" class="com.luhanlin.ioc.domain.SuperUser" parent="user" primary="true">
+        <property name="address" value="北京"/>
+    </bean>
+
+    <bean id="objectFactory" class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
+        <property name="targetBeanName" value="user"/>
+    </bean>
+    <!-- more bean definitions go here -->
+
+</beans>
