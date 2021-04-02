@@ -31,24 +31,14 @@ public class TransferServiceImpl implements TransferService {
     @Override
     public void transfer(String fromCardNo, String toCardNo, int money) throws Exception {
 
-        try {
-            // 开启事务
-            transactionManager.beginTransaction();
+        Account from = accountDao.queryAccountByCardNo(fromCardNo);
+        Account to = accountDao.queryAccountByCardNo(toCardNo);
 
-            Account from = accountDao.queryAccountByCardNo(fromCardNo);
-            Account to = accountDao.queryAccountByCardNo(toCardNo);
+        from.setMoney(from.getMoney()-money);
+        to.setMoney(to.getMoney()+money);
 
-            from.setMoney(from.getMoney()-money);
-            to.setMoney(to.getMoney()+money);
-
-            accountDao.updateAccountByCardNo(to);
-            int c = 1/0;
-            accountDao.updateAccountByCardNo(from);
-            transactionManager.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            transactionManager.rollback();
-            throw e;
-        }
+        accountDao.updateAccountByCardNo(to);
+//        int c = 1/0;
+        accountDao.updateAccountByCardNo(from);
     }
 }
