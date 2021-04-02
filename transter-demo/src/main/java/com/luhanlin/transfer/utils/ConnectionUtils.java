@@ -1,5 +1,8 @@
 package com.luhanlin.transfer.utils;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 /**
  * 连接工具类
  *
@@ -7,4 +10,16 @@ package com.luhanlin.transfer.utils;
  * @since 1.0
  */
 public class ConnectionUtils {
+
+    private static ThreadLocal<Connection> connThreadLocal = new ThreadLocal<>();
+
+    public Connection getCurrentThreadConn() throws SQLException {
+        Connection connection = connThreadLocal.get();
+        if (connection == null) {
+            connection = DruidUtils.getInstance().getConnection();
+            connThreadLocal.set(connection);
+        }
+        return connection;
+    }
+
 }

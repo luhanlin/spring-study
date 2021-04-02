@@ -7,4 +7,6 @@ package com.luhanlin.transfer.factory;
  * @since 1.0
  */
 public class ProxyFactory {
+
+
 }

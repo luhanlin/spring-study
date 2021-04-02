@@ -8,6 +8,7 @@
     <bean id="transferService" class="com.luhanlin.transfer.service.impl.TransferServiceImpl">
         <!--set+ name 之后锁定到传值的set方法了，通过反射技术可以调用该方法传入对应的值-->
         <property name="AccountDao" ref="accountDao"></property>
+        <property name="TransactionManager" ref="transactionManager"></property>
     </bean>
 
 
