@@ -1,5 +1,7 @@
 package com.luhanlin.transfer.dao.impl;
 
+import com.luhanlin.transfer.annotation.LuAutowired;
+import com.luhanlin.transfer.annotation.LuRepository;
 import com.luhanlin.transfer.dao.AccountDao;
 import com.luhanlin.transfer.pojo.Account;
 import com.luhanlin.transfer.utils.ConnectionUtils;
@@ -15,13 +17,15 @@ import java.sql.ResultSet;
  * @author <a href="mailto:allen_lu_hh@163.com">lin</a>
  * @since 1.0
  */
+@LuRepository
 public class JdbcTemplateDaoImpl implements AccountDao {
 
+    @LuAutowired
     private ConnectionUtils connectionUtils;
 
-    public void setConnectionUtils(ConnectionUtils connectionUtils) {
-        this.connectionUtils = connectionUtils;
-    }
+//    public void setConnectionUtils(ConnectionUtils connectionUtils) {
+//        this.connectionUtils = connectionUtils;
+//    }
 
     @Override
     public Account queryAccountByCardNo(String cardNo) throws Exception {

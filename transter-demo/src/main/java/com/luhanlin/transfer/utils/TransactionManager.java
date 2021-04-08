@@ -1,5 +1,8 @@
 package com.luhanlin.transfer.utils;
 
+import com.luhanlin.transfer.annotation.LuAutowired;
+import com.luhanlin.transfer.annotation.LuComponent;
+
 import java.sql.SQLException;
 
 /**
@@ -8,13 +11,15 @@ import java.sql.SQLException;
  * @author <a href="mailto:allen_lu_hh@163.com">lin</a>
  * @since 1.0
  */
+@LuComponent
 public class TransactionManager {
 
+    @LuAutowired
     private ConnectionUtils connectionUtils;
 
-    public void setConnectionUtils(ConnectionUtils connectionUtils) {
-        this.connectionUtils = connectionUtils;
-    }
+//    public void setConnectionUtils(ConnectionUtils connectionUtils) {
+//        this.connectionUtils = connectionUtils;
+//    }
 
     // 开启手动事务控制
     public void beginTransaction() throws SQLException {

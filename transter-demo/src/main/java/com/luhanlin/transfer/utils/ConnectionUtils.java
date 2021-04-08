@@ -1,5 +1,7 @@
 package com.luhanlin.transfer.utils;
 
+import com.luhanlin.transfer.annotation.LuComponent;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -9,6 +11,7 @@ import java.sql.SQLException;
  * @author <a href="mailto:allen_lu_hh@163.com">lin</a>
  * @since 1.0
  */
+@LuComponent
 public class ConnectionUtils {
 
     private static ThreadLocal<Connection> connThreadLocal = new ThreadLocal<>();

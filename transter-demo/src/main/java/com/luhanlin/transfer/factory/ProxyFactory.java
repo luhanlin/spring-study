@@ -1,5 +1,7 @@
 package com.luhanlin.transfer.factory;
 
+import com.luhanlin.transfer.annotation.LuAutowired;
+import com.luhanlin.transfer.annotation.LuComponent;
 import com.luhanlin.transfer.utils.TransactionManager;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -16,13 +18,15 @@ import java.lang.reflect.Proxy;
  * @author <a href="mailto:allen_lu_hh@163.com">lin</a>
  * @since 1.0
  */
+@LuComponent
 public class ProxyFactory {
 
+    @LuAutowired
     private TransactionManager transactionManager;
 
-    public void setTransactionManager(TransactionManager transactionManager) {
-        this.transactionManager = transactionManager;
-    }
+//    public void setTransactionManager(TransactionManager transactionManager) {
+//        this.transactionManager = transactionManager;
+//    }
 
     public Object getJdkProxy(Object obj){
         return Proxy.newProxyInstance(obj.getClass().getClassLoader(), obj.getClass().getInterfaces(), new InvocationHandler() {
